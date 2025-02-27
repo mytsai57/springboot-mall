@@ -37,4 +37,24 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
 
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer productId,
+                                                 @RequestBody @Valid ProductRequest productRequest) {
+
+        // check whether product exist
+        Product product = productService.getProductbyId(productId);
+
+        if (product == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+
+        //update product data
+        productService.updateProduct(productId, productRequest);
+
+        Product updatedProduct = productService.getProductbyId(productId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
+    }
+
 }
