@@ -18,7 +18,7 @@ public class ProductController {
     @GetMapping("/products/{productId}")
     public ResponseEntity<Product> getProduct(@PathVariable Integer productId) {
 
-        Product product = productService.getProductbyId(productId);
+        Product product = productService.getProductById(productId);
 
         if (product != null) {
             return ResponseEntity.status(HttpStatus.OK).body(product);
@@ -32,7 +32,7 @@ public class ProductController {
 
         Integer productId = productService.createProduct(productRequest);
 
-        Product product = productService.getProductbyId(productId);
+        Product product = productService.getProductById(productId);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(product);
     }
@@ -42,7 +42,7 @@ public class ProductController {
                                                  @RequestBody @Valid ProductRequest productRequest) {
 
         // check whether product exist
-        Product product = productService.getProductbyId(productId);
+        Product product = productService.getProductById(productId);
 
         if (product == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -52,9 +52,16 @@ public class ProductController {
         //update product data
         productService.updateProduct(productId, productRequest);
 
-        Product updatedProduct = productService.getProductbyId(productId);
+        Product updatedProduct = productService.getProductById(productId);
 
         return ResponseEntity.status(HttpStatus.OK).body(updatedProduct);
     }
 
+    @DeleteMapping("/products/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Integer productId) {
+
+        productService.deleteProductById(productId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
